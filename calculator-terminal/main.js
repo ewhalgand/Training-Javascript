@@ -1,45 +1,80 @@
 // Variable permetant d'initialiser le package prompt-sync pour intéragir directement dans le terminal
 const prompt = require("prompt-sync")();
 
-console.log("🧮 Calculator: \n")
+const globalFunction = () => {
+  console.log("\n 🧮 Calculator: \n");
 
-// Variable demandant à l'utilisateur d'entrer 2 nombres puis un opérateur
-const num1 = prompt("⏳ Entrer le premier nombre ? ");
-const num2 = prompt("⏳ Entrer le deuxième nombre ? ");
-const operator = prompt("⏳ Entrer un opérateur ? ");
+  console.log(
+    "1. Addition \n, 2. Soustraction \n, 3. Multiplication \n, 4. Division \n"
+  );
 
-// Fonction flécher prenant en paramètre 2 nombres
-const operatorFunction = (number1, number2) => {
+  // Variable demandant à l'utilisateur d'entrer 2 nombres puis un opérateur
+  let operator = 0;
 
-  // Condition if permetant d'envoyer une erreur si l'utilisateur n'a pas entrer 1 des opérateur si dessous 
-  if (operator !== "+" && operator !== "-" && operator !== "*" && operator !== "/") {
-    return console.log("🚫 Ce n'es pas un operateur !");
-  }
+  const promptOperator = () => {
+    const tempOperator = Number(prompt("⏳ Entrer un opérateur ? "));
 
-  // Instruction Switch permetant de comparer chaque cas selon ce que l'utilisateur auras choisis comme opérateur
-  switch (operator) {
-    case "+":
-      return Number(number1) + Number(number2);
-    case "-":
-      return Number(number1) - Number(number2);
-    case "*":
-      return Number(number1) * Number(number2);
-    case "/":
-      const resultDivision = Number(number1) / Number(number2);
-      return Math.round(resultDivision * 100) / 100;
-    default:
-      console.log("🚫 Erreur d'opréation !");
-  }
-};
+    if (
+      tempOperator !== 1 &&
+      tempOperator !== 2 &&
+      tempOperator !== 3 &&
+      tempOperator !== 4
+    ) {
+      console.log("🚫 Error: is not 1, 2, 3 or 4. Retry !");
+      return promptOperator();
+    } else {
+      operator = tempOperator;
+    }
+  };
+  promptOperator();
 
-// Fonction flécher permetant de renvoyer le résultat final du calcul
-const result = () => {
+  const num1 = prompt("⏳ Entrer le premier nombre ? ");
+  const num2 = prompt("⏳ Entrer le deuxième nombre ? ");
 
-  // Condition if permetant de vérifier si les 2 nombres choisis sont bien des nombres
+  // Fonction flécher prenant en paramètre 2 nombres
+  const operatorFunction = (number1, number2) => {
+    // Instruction Switch permetant de comparer chaque cas selon ce que l'utilisateur auras choisis comme opérateur
+    switch (operator) {
+      case 1:
+        const resultAdd = Number(number1) + Number(number2);
+        console.log("Le Résultat est:", resultAdd);
+        break;
+      case 2:
+        const resultSous = Number(number1) - Number(number2);
+        console.log("Le Résultat est:", resultSous);
+        break;
+      case 3:
+        const resultMult = Number(number1) * Number(number2);
+        console.log("Le Résultat est:", resultMult);
+        break;
+      case 4:
+        const resultDivision = Number(number1) / Number(number2);
+        console.log("Le Résultat est:", Math.round(resultDivision * 100) / 100);
+        break;
+      default:
+        console.log("🚫 Erreur d'opréation !");
+    }
+  };
+
   if (!Number(num1) || !Number(num2)) {
     return console.log("🚫 Ce n'es pas un nombre !");
   }
-
-  console.log(operatorFunction(num1, num2));
+  operatorFunction(num1, num2);
 };
-result();
+globalFunction();
+
+// Fonction flécher permetant de renvoyer le résultat final du calcul
+const retry = () => {
+  const retryCalcul = prompt("\n Relancer: [Y/N]").toLocaleLowerCase()
+
+  if (retryCalcul === "y") {
+    globalFunction()
+    retry();
+  } else if (retryCalcul === "n") {
+    return
+  } else {
+    console.log("Erreur: choisissez Y/N")
+    return retry()
+  }
+};
+retry();
